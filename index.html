@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saraswati: Indian Digital Library</title>
+    <meta name="description" content="Discover the rich heritage of Indian literature, history, and mythology for all ages.">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-om logo-icon"></i>
+            <span>Saraswati Library</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#collections">Collections</a></li>
+            <li><a href="#heritage">Heritage</a></li>
+        </ul>
+        <div class="nav-actions" style="display: flex; gap: 1rem; align-items: center;">
+            <div id="authNavContainer">
+                <button class="login-nav-btn" id="openLoginBtn"><i class="fa-solid fa-user"></i> Login</button>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search books...">
+                <button aria-label="Search" onclick="handleSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero" id="home">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Wisdom of the Ages</h1>
+            <p>Immerse yourself in India's rich literary heritage. From ancient epics for children to philosophical treatises for adults.</p>
+            <a href="#collections" class="cta-btn">Explore Collections</a>
+        </div>
+    </header>
+
+    <!-- Personalized Recommendations (Hidden until login) -->
+    <section class="recommendations hidden" id="recommendationsSection">
+        <div class="section-title">
+            <h2>Recommended for You</h2>
+            <div class="divider"></div>
+            <p class="section-subtitle">Based on your recent interests and age group</p>
+        </div>
+        <div class="book-grid" id="recommendedGrid">
+            <!-- Populated post-login -->
+        </div>
+    </section>
+
+    <!-- Featured Collections -->
+    <section class="collections" id="collections">
+        <div class="section-title">
+            <h2>Digital Collections</h2>
+            <div class="divider"></div>
+            <p class="section-subtitle">Browse books tailored for different age groups</p>
+        </div>
+
+        <!-- Age Group Filters -->
+        <div class="age-filters">
+            <button class="filter-btn active" data-age="all">All Ages</button>
+            <button class="filter-btn" data-age="children">Children (0-12)</button>
+            <button class="filter-btn" data-age="teens">Teens (13-18)</button>
+            <button class="filter-btn" data-age="adults">Adults (18+)</button>
+        </div>
+        
+        <div class="book-grid" id="bookGrid">
+            <!-- Books injected via JS based on selected age group -->
+        </div>
+    </section>
+
+    <!-- Heritage Section -->
+    <section class="heritage" id="heritage">
+        <div class="heritage-content">
+            <div class="section-title">
+                <h2>Our Heritage</h2>
+                <div class="divider"></div>
+            </div>
+            <p class="heritage-text">
+                The Saraswati Digital Library is dedicated to preserving and sharing the vast ocean of
+                Indian literature, philosophy, and history. Named after the goddess of knowledge,
+                music, art, and wisdom, our mission is to make these timeless classics accessible
+                to everyone, across all generations. From the Panchatantra tales designed to impart 
+                wisdom to children, to the profound spiritual inquiries of the Upanishads, we bridge 
+                the past and the future.
+            </p>
+            <div class="features-grid">
+                <div class="feature">
+                    <i class="fa-solid fa-scroll"></i>
+                    <h3>Ancient Texts</h3>
+                    <p>High-quality digital transcriptions of classic scriptures.</p>
+                </div>
+                <div class="feature">
+                    <i class="fa-solid fa-child-reaching"></i>
+                    <h3>For the Young</h3>
+                    <p>Illustrated stories and folklore adapted for children.</p>
+                </div>
+                <div class="feature">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                    <h3>Modern Lore</h3>
+                    <p>Contemporary literature reflecting modern Indian society.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Book Reader Modal -->
+    <div class="modal-overlay" id="bookModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModalBtn" aria-label="Close Reader"><i class="fa-solid fa-times"></i></button>
+            <div class="modal-header">
+                <div class="modal-icon"><i class="fa-solid fa-book-open"></i></div>
+                <div>
+                    <h2 id="modalTitle">Book Title</h2>
+                    <p id="modalAuthor">Author Name</p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <span class="modal-tag" id="modalAgeGroup">Age Group</span>
+                <span class="modal-tag" id="modalCategory">Category</span>
+                <div class="modal-rating" id="modalRating" style="margin-bottom: 1rem; color: #F3BC2E; font-size: 1.2rem;">
+                    <!-- Stars injected via JS -->
+                </div>
+                <div class="modal-description" id="modalDescription">
+                    <!-- Book synopsis goes here -->
+                </div>
+                <div class="modal-reviews" id="modalReviews">
+                    <h3>Customer Reviews</h3>
+                    <div id="reviewsContainer">
+                        <!-- Reviews injected via JS -->
+                    </div>
+                </div>
+                <div class="modal-reader-box">
+                    <h3>Excerpt</h3>
+                    <p id="modalExcerpt">Lorem ipsum text for the excerpt...</p>
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; gap: 1rem;">
+                <button class="primary-btn" id="downloadBtn" onclick="initiatePayment()">Pay ₹149 & Download PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <!-- Chat Window -->
+        <div class="chat-window hidden" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-info">
+                    <img src="https://ui-avatars.com/api/?name=S&background=E87A5D&color=fff&rounded=true" alt="Librarian Avatar" class="chat-avatar">
+                    <div class="chat-title-group">
+                        <h3>Library Guide</h3>
+                        <span class="status"><span class="status-dot"></span>Online</span>
+                    </div>
+                </div>
+                <button class="close-chat" id="closeChatBtn" aria-label="Close Chat"><i class="fa-solid fa-times"></i></button>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="msg-content">
+                        Namaste! 🙏 Welcome to Saraswati Library. I can help you find books for different age groups, authors, or suggest reading materials. What are you looking for today?
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Ask about books, age groups..." autocomplete="off">
+                <button id="sendMessageBtn" aria-label="Send Message"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        <!-- Chat Toggle Button -->
+        <button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Toggle Chat">
+            <i class="fa-solid fa-message chat-icon"></i>
+            <span class="tooltip">Ask the Guide</span>
+        </button>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content login-content">
+            <button class="modal-close" id="closeLoginBtn" aria-label="Close Login"><i class="fa-solid fa-times"></i></button>
+            <div class="login-header">
+                <i class="fa-solid fa-om login-icon"></i>
+                <h2>Welcome Back</h2>
+                <p>Sign in to your Saraswati Library account</p>
+            </div>
+            
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username or Email</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="text" id="username" placeholder="Enter your username" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                </div>
+                
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox"> Remember me
+                    </label>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="primary-btn login-submit-btn">Sign In</button>
+                
+                <p class="signup-prompt">Don't have an account? <a href="#" id="openRegisterLink">Register here</a>.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal-content login-content">
+            <button class="modal-close" id="closeRegisterBtn" aria-label="Close Register"><i class="fa-solid fa-times"></i></button>
+            <div class="login-header">
+                <i class="fa-solid fa-user-plus login-icon"></i>
+                <h2>Join Sarasota</h2>
+                <p>Create your new library account</p>
+            </div>
+            
+            <form class="login-form" id="registerForm">
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                        <label for="firstName">First Name</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-signature"></i>
+                            <input type="text" id="firstName" placeholder="First Name" required>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                        <label for="lastName">Last Name</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-signature"></i>
+                            <input type="text" id="lastName" placeholder="Last Name" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="regEmail">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="regEmail" placeholder="Enter your email" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar"></i>
+                        <input type="number" id="age" min="5" max="100" placeholder="Enter your age" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="regPassword" placeholder="Create a password" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="primary-btn login-submit-btn">Create Account</button>
+                
+                <p class="signup-prompt">Already have an account? <a href="#" id="backToLoginLink">Log In</a>.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
